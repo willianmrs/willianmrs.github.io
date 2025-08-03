@@ -52,6 +52,15 @@ function responsiveStyles() {
         flex: 0 0 100%;
         margin-bottom: 1.5rem;
       }
+      
+      /* Responsive table styles */
+      table {
+        font-size: 0.85rem;
+      }
+      th, td {
+        padding: 0.5rem;
+        min-width: 80px;
+      }
     }
     
     @media (max-width: 480px) {
@@ -59,6 +68,15 @@ function responsiveStyles() {
       .post-container { padding: 1.5rem; }
       h1 { font-size: 1.8rem; }
       .subtitle { font-size: 1.2rem; }
+      
+      /* Mobile table styles */
+      table {
+        font-size: 0.8rem;
+      }
+      th, td {
+        padding: 0.4rem;
+        min-width: 70px;
+      }
     }
   `;
 }

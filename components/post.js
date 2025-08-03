@@ -4,15 +4,35 @@
  * @returns {string} HTML for post listing
  */
 function renderPostItem(post) {
+    // Format date nicely
+    const formattedDate = post.date ? formatDate(post.date) : '';
+    
     return `
     <div class="post-item">
-      <h2><a href="${post.url}">${post.title}</a></h2>
-      ${post.subtitle ? `<h3>${post.subtitle}</h3>` : ''}
-      ${post.date ? `<div class="post-date">${post.date}</div>` : ''}
+      <div class="post-header">
+        <h2><a href="${post.url}">${post.title}</a></h2>
+        ${formattedDate ? `<div class="post-date">${formattedDate}</div>` : ''}
+      </div>
+      ${post.subtitle ? `<h3 class="post-subtitle">${post.subtitle}</h3>` : ''}
       <div class="post-excerpt">${post.excerpt}</div>
       <a href="${post.url}" class="read-more">Continue reading →</a>
     </div>
   `;
+}
+
+/**
+ * Format date string nicely
+ * @param {string} dateString - Date in YYYY-MM-DD format
+ * @returns {string} Formatted date
+ */
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    return date.toLocaleDateString('en-US', options);
 }
 
 /**
@@ -32,10 +52,16 @@ function postStyles() {
       max-width: 800px;
       box-sizing: border-box;
     }
+    .post-header {
+      margin-bottom: 1rem;
+    }
     .post-item h2 { 
-      margin-top: 0; 
-      margin-bottom: 0.5rem;
-      color: #2c3e50; 
+      margin: 0 0 0.5rem 0; 
+      color: #2c3e50;
+      font-size: 1.8rem;
+      line-height: 1.3;
+      word-wrap: break-word;
+      hyphens: auto;
     }
     .post-item h2 a { 
       color: #2c3e50; 
@@ -45,16 +71,19 @@ function postStyles() {
     .post-item h2 a:hover { 
       color: #667eea; 
     }
-    .post-item h3 {
+    .post-date { 
+      color: #8892b0; 
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .post-subtitle {
       color: #718096;
       font-weight: 400;
-      margin-top: 0;
-      margin-bottom: 1rem;
-    }
-    .post-date { 
-      color: #718096; 
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
+      font-size: 1.1rem;
     }
     .post-excerpt {
       color: #4a5568;
@@ -166,14 +195,43 @@ function postContentStyles() {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
+      overflow-x: auto;
+      display: block;
+      white-space: nowrap;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #e8ecf0;
+    }
+    .table-container table {
+      margin: 0;
+      border: none;
+      min-width: 100%;
+      display: table;
     }
     th, td {
       border: 1px solid #e8ecf0;
       padding: 0.75rem;
       text-align: left;
+      vertical-align: top;
+      word-wrap: break-word;
+      min-width: 100px;
     }
     th {
       background-color: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    td {
+      background-color: white;
+    }
+    tr:hover td {
+      background-color: #f8f9ff;
     }
     .nav-links {
       margin-top: 3rem;
@@ -184,31 +242,47 @@ function postContentStyles() {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      gap: 1rem;
     }
     .nav-section {
       flex: 0 0 48%;
+      min-width: 280px;
     }
     .nav-section h3 {
       font-size: 1rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       color: #718096;
+      font-weight: 600;
     }
     .nav-section ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
+    .nav-section li {
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
     .nav-section a {
-      color: #2c3e50;
+      color: #718096;
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: all 0.2s ease;
+      display: block;
+      position: relative;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
     }
     .nav-section a:hover {
       color: #667eea;
+      transform: translateX(2px);
     }
     .nav-section .date {
-      color: #718096;
-      font-size: 0.8rem;
+      color: #8892b0;
+      font-size: 0.7rem;
+      font-weight: 400;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
   `;
 }

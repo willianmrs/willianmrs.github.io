@@ -37,16 +37,29 @@ function parseMarkdown(content) {
   const match = content.match(frontMatterRegex);
 
   if (!match) {
+    let htmlContent = md.render(content);
+    htmlContent = wrapTablesInContainers(htmlContent);
     return {
       frontMatter: {},
-      content: md.render(content)
+      content: htmlContent
     };
   }
 
   const frontMatter = yaml.load(match[1]);
   const markdownContent = match[2];
-  const htmlContent = md.render(markdownContent);
+  let htmlContent = md.render(markdownContent);
+  htmlContent = wrapTablesInContainers(htmlContent);
   return { frontMatter, content: htmlContent };
+}
+
+/**
+ * Wrap tables in responsive containers
+ * @param {string} html - HTML content
+ * @returns {string} HTML with wrapped tables
+ */
+function wrapTablesInContainers(html) {
+  return html.replace(/<table>/g, '<div class="table-container"><table>')
+            .replace(/<\/table>/g, '</table></div>');
 }
 
 /**
@@ -137,13 +150,24 @@ function getPosts() {
 }
 
 /**
- * Generate post navigation links
+ * Truncate title for navigation
+ * @param {string} title - Full title
+ * @param {number} maxLength - Maximum characters
+ * @returns {string} Truncated title
+ */
+function truncateTitle(title, maxLength = 35) {
+  if (title.length <= maxLength) return title;
+  return title.substring(0, maxLength).trim() + '...';
+}
+
+/**
+ * Generate navigation links for a post
  * @param {Object} currentPost - Current post object
- * @param {Array} allPosts - All post objects
+ * @param {Array} allPosts - Array of all posts
  * @returns {string} HTML for navigation links
  */
-function generatePostNavigation(currentPost, allPosts) {
-  const currentIndex = allPosts.findIndex(post => post.slug === currentPost.slug);
+function generateNavigation(currentPost, allPosts) {
+  const currentIndex = allPosts.findIndex(post => post.url === currentPost.url);
 
   const prevPosts = allPosts.slice(0, currentIndex).slice(-3);
   const nextPosts = allPosts.slice(currentIndex + 1, currentIndex + 4);
@@ -153,7 +177,11 @@ function generatePostNavigation(currentPost, allPosts) {
   if (nextPosts.length > 0) {
     navHtml += '<div class="nav-section nav-previous"><h3>← Posts Anteriores</h3><ul>';
     nextPosts.forEach(post => {
-      navHtml += `<li><a href="${post.url}">${post.title}</a> <span class="date">(${post.date})</span></li>`;
+      const truncatedTitle = truncateTitle(post.title);
+      navHtml += `<li>
+        <a href="${post.url}" title="${post.title}">${truncatedTitle}</a>
+        <div class="date">${post.date}</div>
+      </li>`;
     });
     navHtml += '</ul></div>';
   }
@@ -161,7 +189,11 @@ function generatePostNavigation(currentPost, allPosts) {
   if (prevPosts.length > 0) {
     navHtml += '<div class="nav-section nav-next"><h3>Posts Recentes →</h3><ul>';
     prevPosts.reverse().forEach(post => {
-      navHtml += `<li><a href="${post.url}">${post.title}</a> <span class="date">(${post.date})</span></li>`;
+      const truncatedTitle = truncateTitle(post.title);
+      navHtml += `<li>
+        <a href="${post.url}" title="${post.title}">${truncatedTitle}</a>
+        <div class="date">${post.date}</div>
+      </li>`;
     });
     navHtml += '</ul></div>';
   }
@@ -179,7 +211,7 @@ function generatePost(post, allPosts) {
   // Ensure public directory exists
   ensureDirectoryExists(PUBLIC_DIR);
 
-  const navHtml = generatePostNavigation(post, allPosts);
+  const navHtml = generateNavigation(post, allPosts);
 
   const content = `
   ${renderHeader()}
