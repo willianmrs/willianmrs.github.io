@@ -293,6 +293,11 @@ function generateBlog() {
   // Copy assets
   copyAssets();
 
+  // Create .nojekyll file for GitHub Pages
+  const nojekyllPath = path.join(PUBLIC_DIR, '.nojekyll');
+  fs.writeFileSync(nojekyllPath, '');
+  console.log('Created: .nojekyll');
+
   console.log("\nBlog generated successfully with new component-based architecture!");
   console.log(`Total posts: ${posts.length}`);
   console.log("Benefits of component-based approach:");
