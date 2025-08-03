@@ -38,16 +38,16 @@ function parseMarkdown(content) {
   const match = content.match(frontMatterRegex);
 
   if (!match) {
-    return { 
-      frontMatter: {}, 
-      content: md.render(content) 
+    return {
+      frontMatter: {},
+      content: md.render(content)
     };
   }
-  
+
   const frontMatter = yaml.load(match[1]);
   const markdownContent = match[2];
   const htmlContent = md.render(markdownContent);
-    return { frontMatter, content: htmlContent };
+  return { frontMatter, content: htmlContent };
 }
 
 /**
