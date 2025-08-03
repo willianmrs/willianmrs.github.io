@@ -4,35 +4,17 @@
  * @returns {string} HTML for post listing
  */
 function renderPostItem(post) {
-    // Format date nicely
-    const formattedDate = post.date ? formatDate(post.date) : '';
-    
     return `
     <div class="post-item">
       <div class="post-header">
         <h2><a href="${post.url}">${post.title}</a></h2>
-        ${formattedDate ? `<div class="post-date">${formattedDate}</div>` : ''}
+        ${post.date ? `<div class="post-date">${post.date}</div>` : ''}
       </div>
       ${post.subtitle ? `<h3 class="post-subtitle">${post.subtitle}</h3>` : ''}
       <div class="post-excerpt">${post.excerpt}</div>
       <a href="${post.url}" class="read-more">Continue reading →</a>
     </div>
   `;
-}
-
-/**
- * Format date string nicely
- * @param {string} dateString - Date in YYYY-MM-DD format
- * @returns {string} Formatted date
- */
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    };
-    return date.toLocaleDateString('en-US', options);
 }
 
 /**
