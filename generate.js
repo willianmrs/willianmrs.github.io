@@ -23,7 +23,6 @@ const ASSETS_DIR = path.join(__dirname, 'assets');
  */
 function ensureDirectoryExists(dir) {
   if (!fs.existsSync(dir)) {
-    console.log(`Creating directory: ${dir}`);
     fs.mkdirSync(dir, { recursive: true });
   }
 }
@@ -265,14 +264,13 @@ function copyAssets() {
       const destPath = path.join(PUBLIC_DIR, asset);
 
       fs.copyFileSync(sourcePath, destPath);
-      console.log(`Copied asset: ${asset}`);
     });
   }
 }
 
 // Main function to generate the blog
 function generateBlog() {
-  console.log("Generating blog with component-based approach...");
+  console.log("🔨 Generating blog...");
 
   // Ensure the public directory exists at the start
   ensureDirectoryExists(PUBLIC_DIR);
@@ -298,13 +296,7 @@ function generateBlog() {
   fs.writeFileSync(nojekyllPath, '');
   console.log('Created: .nojekyll');
 
-  console.log("\nBlog generated successfully with new component-based architecture!");
-  console.log(`Total posts: ${posts.length}`);
-  console.log("Benefits of component-based approach:");
-  console.log("1. Consistent styling across all pages");
-  console.log("2. Modular and maintainable code");
-  console.log("3. Easier to add new features");
-  console.log("4. Better separation of concerns");
+  console.log(`\n✅ Blog generated successfully! (${posts.length} posts)`);
 }
 
 // Run the generator
