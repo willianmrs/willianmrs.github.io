@@ -6,7 +6,7 @@
 function renderHeader(title = "Wilian's Lab") {
     return `
   <header>
-    <h1><a href="index.html">${title}</a></h1>
+    <h1><a href="/">${title}</a></h1>
   </header>
   `;
 }
