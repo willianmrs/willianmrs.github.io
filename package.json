@@ -1,0 +1,14 @@
+{
+  "name": "static-blog",
+  "version": "1.0.0",
+  "description": "Um gerador de blog estático minimalista baseado em componentes",
+  "main": "generate.js",
+  "scripts": {
+    "build": "node generate.js",
+    "serve": "npx serve public"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "markdown-it": "^14.1.0"
+  }
+}
